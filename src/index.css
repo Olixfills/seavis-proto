@@ -1,0 +1,41 @@
+@import "tailwindcss";
+
+@theme {
+  --color-navy: #0B2F5C;
+  --color-navy-dark: #071F3F;
+  --color-navy-light: #1A4785;
+  --color-gold: #D4AF37;
+  --color-gold-light: #F1D570;
+  
+  --font-sans: "Inter", "Roboto", system-ui, -apple-system, sans-serif;
+  --font-mono: "Fira Code", monospace;
+}
+
+@layer base {
+  body {
+    @apply text-slate-900 bg-slate-50 antialiased;
+  }
+}
+
+/* Custom form input styles for that rigid military look */
+@layer components {
+  .military-input {
+    @apply w-full border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-navy focus:border-navy transition-colors bg-white;
+  }
+  
+  .military-label {
+    @apply block text-sm font-semibold text-slate-700 mb-1;
+  }
+  
+  .military-table {
+    @apply w-full border-collapse border border-slate-300;
+  }
+  
+  .military-table th, .military-table td {
+    @apply border border-slate-300 px-4 py-2 text-left text-sm;
+  }
+  
+  .military-table th {
+    @apply bg-slate-100 font-semibold text-slate-700;
+  }
+}
