@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
-import { Printer, ShieldCheck } from "lucide-react";
+import { Printer } from "lucide-react";
+import { Link } from "react-router-dom";
 
 interface LayoutProps {
   children: ReactNode;
@@ -12,20 +13,24 @@ export function Layout({ children }: LayoutProps) {
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col items-center">
-      <header className="w-full bg-navy text-white shadow-md print:hidden">
-        <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            {/* Placeholder for Nigerian Navy Logo */}
-            <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-navy shadow-inner">
-              <ShieldCheck size={28} />
-            </div>
-          </div>
+      <header className="w-full bg-[#0A1C3F] text-white shadow-md print:hidden">
+        <div className="max-w-5xl mx-auto px-4 py-2 flex items-center justify-between">
+          <Link
+            to="/"
+            className="flex items-center hover:opacity-90 transition-opacity"
+          >
+            <img
+              src="/logo.png"
+              alt="Nigerian Navy Logo"
+              className="h-14 w-auto drop-shadow-md"
+            />
+          </Link>
 
-          <div className="flex-1 text-center">
-            <h1 className="text-4xl font-serif font-bold tracking-wider mb-1 text-white">
+          <div className="flex-1 text-center flex flex-col items-center justify-center">
+            <h1 className="text-4xl font-serif font-bold tracking-wider text-white leading-none">
               SEAVIS
             </h1>
-            <p className="text-sm text-slate-200 tracking-wide">
+            <p className="text-[13px] text-slate-200 tracking-wide mt-1">
               Secure Enrollment & Applicant Verification Information System
             </p>
           </div>
@@ -43,11 +48,22 @@ export function Layout({ children }: LayoutProps) {
       </header>
 
       {/* Print-only Header Header (simpler for paper) */}
-      <div className="hidden print:block w-full text-center py-6 border-b-2 border-navy mb-6">
-        <h1 className="text-3xl font-serif font-bold text-navy mb-1">SEAVIS</h1>
-        <p className="text-sm text-slate-700">
-          Secure Enrollment & Applicant Verification Information System
-        </p>
+      <div className="hidden print:flex w-full items-center justify-between py-6 border-b-2 border-navy mb-6">
+        <div className="flex items-center">
+          <img
+            src="/logo.png"
+            alt="Nigerian Navy Logo"
+            className="h-16 w-auto mr-4"
+          />
+        </div>
+        <div className="flex-1 text-center pr-16">
+          <h1 className="text-3xl font-serif font-bold text-navy mb-1">
+            SEAVIS
+          </h1>
+          <p className="text-sm text-slate-700">
+            Secure Enrollment & Applicant Verification Information System
+          </p>
+        </div>
       </div>
 
       <main className="w-full max-w-5xl mx-auto px-4 py-8 flex-1">
@@ -55,7 +71,7 @@ export function Layout({ children }: LayoutProps) {
       </main>
 
       <footer className="w-full text-center py-6 text-xs text-slate-500 border-t border-slate-200 mt-auto print:mt-10">
-        SEAVIS | Nigerian Navy Recruitment Digital Verification System
+        SEAVIS | Nigerian Navy Recruitment Digital Verification System Prototype
       </footer>
     </div>
   );

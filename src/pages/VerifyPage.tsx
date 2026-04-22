@@ -35,6 +35,16 @@ export function VerifyPage() {
   
   // For a simple app, we just simulate auth state for the officer updating UI
   const [isOfficer, setIsOfficer] = useState(false);
+  const [officerId, setOfficerId] = useState('');
+
+  useEffect(() => {
+    if (candidate) {
+      document.title = `seavis-candidate-biodata-${candidate.candidateId}`;
+    } else {
+      document.title = "SEAVIS | Verification";
+    }
+    return () => { document.title = "SEAVIS"; }
+  }, [candidate]);
 
   useEffect(() => {
     if (!id) return;
@@ -55,8 +65,17 @@ export function VerifyPage() {
 
   const handleStageUpdate = async (stageKey: keyof Candidate['stages'], newStatus: StageStatus) => {
     if (!candidate) return;
+    if (!officerId.trim()) {
+      alert("Please enter your Officer ID before updating a stage.");
+      return;
+    }
+
     try {
       const newStages = { ...candidate.stages, [stageKey]: newStatus };
+      const newStageUpdates = {
+        ...(candidate.stageUpdates || {}),
+        [stageKey]: { officerId: officerId.trim(), timestamp: Date.now() }
+      };
       
       // Determine new current phase based on the last passed stage
       let currentPhase = 'Online Registration';
@@ -74,6 +93,7 @@ export function VerifyPage() {
 
       await updateDoc(doc(db, 'candidates', candidate.id), {
         stages: newStages,
+        stageUpdates: newStageUpdates,
         currentPhase
       });
 
@@ -82,7 +102,7 @@ export function VerifyPage() {
         candidateId: candidate.candidateId,
         stage: stageKey,
         action: newStatus,
-        officerId: 'officer-1', // Mocked ID
+        officerId: officerId.trim(),
         officerName: 'Auth Officer', // Mocked Name
         location: 'Verification Centre',
         timestamp: Date.now()
@@ -99,21 +119,30 @@ export function VerifyPage() {
   return (
     <Layout>
       {/* Officer Auth Toggle (Mock for demo) */}
-      <div className="mb-4 text-right print:hidden">
+      <div className="mb-4 text-right print:hidden flex flex-col items-end gap-2">
         <label className="text-sm text-slate-500 flex items-center justify-end gap-2">
           <input type="checkbox" checked={isOfficer} onChange={(e) => setIsOfficer(e.target.checked)} />
           Enable Officer Mode (Update Stages)
         </label>
+        {isOfficer && (
+          <input 
+            type="text" 
+            placeholder="Enter Officer ID (e.g. NN/1234)" 
+            className="military-input max-w-xs text-sm py-1"
+            value={officerId}
+            onChange={e => setOfficerId(e.target.value.toUpperCase())}
+          />
+        )}
       </div>
 
       <Section title="Candidate Identification">
-        <div className="flex flex-col md:flex-row gap-4 p-4">
-          <div className="w-full md:w-1/4 flex-shrink-0">
+        <div className="flex flex-col md:flex-row print:flex-row gap-4 p-4 print:p-2">
+          <div className="w-full md:w-1/4 print:w-1/4 flex-shrink-0">
             <div className="border border-slate-300 p-2 bg-slate-50">
               <img src={candidate.photoUrl || 'https://via.placeholder.com/150'} alt="Candidate" className="w-full h-auto object-cover border border-slate-200" />
             </div>
           </div>
-          <div className="w-full md:w-3/4">
+          <div className="w-full md:w-3/4 print:w-3/4">
             <FieldTable>
               <FieldRow label="Full Name" value={candidate.fullName} />
               <FieldRow label="Date of Birth" value={candidate.dob} />
@@ -140,30 +169,35 @@ export function VerifyPage() {
           {STAGE_ORDER.slice(1).map((stage, idx) => {
             const status = candidate.stages[stage];
             const prevStageStatus = candidate.stages[STAGE_ORDER[idx]]; // Previous stage
-            // Stage is disabled if previous stage is not PASS, or if ANY stage is FAIL
+            // Stage is disabled if previous stage is not PASS, or if ANY stage is FAIL, or if it's already updated
             const hasFailedAny = Object.values(candidate.stages).includes('fail');
-            const isDisabled = prevStageStatus !== 'pass' || (hasFailedAny && status === 'pending');
+            const isAlreadySet = status !== 'pending';
+            const isDisabled = isAlreadySet || prevStageStatus !== 'pass' || (hasFailedAny && status === 'pending');
 
             return (
               <FieldRow key={stage} label={STAGE_LABELS[stage]}>
-                {isOfficer && !isDisabled ? (
-                  <select 
-                    value={status} 
-                    onChange={(e) => handleStageUpdate(stage, e.target.value as StageStatus)}
-                    className="military-input max-w-xs font-bold"
-                    style={{
-                      color: status === 'pass' ? '#15803d' : status === 'fail' ? '#dc2626' : '#d97706'
-                    }}
-                  >
-                    <option value="pending">⏳ PENDING</option>
-                    <option value="pass">✅ PASS</option>
-                    <option value="fail">❌ FAIL</option>
-                  </select>
-                ) : (
-                  <div className={isDisabled && status === 'pending' ? 'opacity-50' : ''}>
-                    <StatusBadge status={status} />
-                  </div>
-                )}
+                <div className="flex flex-col">
+                  {isOfficer && !isAlreadySet && !isDisabled ? (
+                    <select 
+                      value={status} 
+                      onChange={(e) => handleStageUpdate(stage, e.target.value as StageStatus)}
+                      className="military-input max-w-xs font-bold text-[#d97706]"
+                    >
+                      <option value="pending">⏳ PENDING</option>
+                      <option value="pass">✅ PASS</option>
+                      <option value="fail">❌ FAIL</option>
+                    </select>
+                  ) : (
+                    <div className={isDisabled && status === 'pending' ? 'opacity-50' : ''}>
+                      <StatusBadge status={status} />
+                    </div>
+                  )}
+                  {status !== 'pending' && candidate.stageUpdates?.[stage] && (
+                    <span className="text-xs text-slate-500 mt-1 print:text-[10px]">
+                      By {candidate.stageUpdates[stage].officerId} on {new Date(candidate.stageUpdates[stage].timestamp).toLocaleString()}
+                    </span>
+                  )}
+                </div>
               </FieldRow>
             );
           })}

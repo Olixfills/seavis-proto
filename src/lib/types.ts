@@ -9,6 +9,11 @@ export interface CandidateStages {
   interview: StageStatus;
 }
 
+export interface StageUpdateDetail {
+  officerId: string;
+  timestamp: number;
+}
+
 export interface Candidate {
   id: string; // Document ID
   candidateId: string; // e.g. NNBTS36-2024-00125
@@ -24,6 +29,7 @@ export interface Candidate {
   centre: string;
   currentPhase: string;
   stages: CandidateStages;
+  stageUpdates?: Partial<Record<keyof CandidateStages, StageUpdateDetail>>;
   createdAt: number;
 }
 

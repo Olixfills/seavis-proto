@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Layout } from "../components/Layout";
 import { Section } from "../components/ui";
 import { QRCodeCanvas } from "qrcode.react";
@@ -13,6 +13,15 @@ export function RegisterPage() {
   const [loading, setLoading] = useState(false);
   const [successId, setSuccessId] = useState<string | null>(null);
   const [photoFile, setPhotoFile] = useState<File | null>(null);
+
+  useEffect(() => {
+    if (successId) {
+      document.title = `seavis-candidate-qr-${successId}`;
+    } else {
+      document.title = "SEAVIS | Registration";
+    }
+    return () => { document.title = "SEAVIS"; }
+  }, [successId]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -84,9 +93,9 @@ export function RegisterPage() {
             Candidate has been added to the system.
           </p>
 
-          <div className="bg-white p-6 border border-slate-300 rounded shadow-sm inline-block mb-8">
+          <div className="bg-white p-6 border border-slate-300 rounded shadow-sm inline-flex flex-col items-center justify-center mb-8">
             <QRCodeCanvas value={verifyUrl} size={200} level="H" />
-            <p className="text-xs text-slate-500 mt-4 break-all">{verifyUrl}</p>
+            <p className="text-xs text-slate-500 mt-4 break-all max-w-[250px] text-center">{verifyUrl}</p>
           </div>
 
           <div className="flex gap-4 justify-center">
@@ -124,8 +133,8 @@ export function RegisterPage() {
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <Section title="Candidate Identification">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="md:col-span-1">
+          <div className="grid grid-cols-1 md:grid-cols-3 print:grid-cols-3 gap-6">
+            <div className="md:col-span-1 print:col-span-1">
               <label className="military-label">Passport Photograph</label>
               <div className="border-2 border-dashed border-slate-300 p-4 text-center rounded bg-slate-50">
                 {photoFile ? (
@@ -148,7 +157,7 @@ export function RegisterPage() {
                 />
               </div>
             </div>
-            <div className="md:col-span-2 space-y-4">
+            <div className="md:col-span-2 print:col-span-2 space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="military-label">Full Name</label>
@@ -212,7 +221,7 @@ export function RegisterPage() {
         </Section>
 
         <Section title="Recruitment Details">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 print:grid-cols-3 gap-4">
             <div>
               <label className="military-label">Batch</label>
               <input
@@ -239,8 +248,9 @@ export function RegisterPage() {
                 type="text"
                 name="chestNumber"
                 required
-                className="military-input"
+                className="military-input uppercase"
                 placeholder="e.g. 36/2024/125"
+                onInput={(e) => (e.currentTarget.value = e.currentTarget.value.toUpperCase())}
               />
             </div>
           </div>
