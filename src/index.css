@@ -1,13 +1,16 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
 @theme {
-  --color-navy: #0B2F5C;
-  --color-navy-dark: #071F3F;
-  --color-navy-light: #1A4785;
-  --color-gold: #D4AF37;
-  --color-gold-light: #F1D570;
+  --color-navy: #0F172A;
+  --color-navy-dark: #020617;
+  --color-navy-light: #1E293B;
+  --color-gold: #B45309;
+  --color-gold-light: #F59E0B;
+  --color-accent: #0369A1;
   
-  --font-sans: "Inter", "Roboto", system-ui, -apple-system, sans-serif;
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --font-serif: "Inter", serif; /* Using Inter for both as per design system Loud Minimal */
   --font-mono: "Fira Code", monospace;
 }
 

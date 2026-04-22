@@ -28,7 +28,7 @@ export function Layout({ children }: LayoutProps) {
 
           <div className="flex-1 text-center flex flex-col items-center justify-center">
             <h1 className="text-4xl font-serif font-bold tracking-wider text-white leading-none">
-              SEAVIS
+              NN-SEAVIS
             </h1>
             <p className="text-[13px] text-slate-200 tracking-wide mt-1">
               Secure Enrollment & Applicant Verification Information System
@@ -58,7 +58,7 @@ export function Layout({ children }: LayoutProps) {
         </div>
         <div className="flex-1 text-center pr-16">
           <h1 className="text-3xl font-serif font-bold text-navy mb-1">
-            SEAVIS
+            NN-SEAVIS
           </h1>
           <p className="text-sm text-slate-700">
             Secure Enrollment & Applicant Verification Information System
@@ -71,7 +71,7 @@ export function Layout({ children }: LayoutProps) {
       </main>
 
       <footer className="w-full text-center py-6 text-xs text-slate-500 border-t border-slate-200 mt-auto print:mt-10">
-        SEAVIS | Nigerian Navy Recruitment Digital Verification System Prototype
+        NN-SEAVIS | Nigerian Navy Recruitment Digital Verification System Prototype
       </footer>
     </div>
   );

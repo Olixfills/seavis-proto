@@ -26,6 +26,22 @@ export function FieldRow({ label, value, children }: { label: string; value?: st
   );
 }
 
+export function TripleFieldRow({ label, value, children }: { label: string; value: string; children: ReactNode }) {
+  return (
+    <div className="flex flex-col sm:flex-row print:flex-row sm:items-center print:items-center border-b border-slate-200 last:border-b-0 py-2 sm:py-0 print:py-0 print:break-inside-avoid">
+      <div className="sm:w-1/4 print:w-1/4 px-2 sm:px-4 print:px-4 py-1 sm:py-3 print:py-3 font-semibold text-slate-800 text-sm bg-slate-50/50">
+        {label}
+      </div>
+      <div className="sm:w-2/4 print:w-2/4 px-2 sm:px-4 print:px-4 py-1 sm:py-3 print:py-3 text-sm text-slate-900 border-l-0 sm:border-l print:border-l border-slate-200">
+        {value}
+      </div>
+      <div className="sm:w-1/4 print:w-1/4 px-2 sm:px-4 print:px-4 py-1 sm:py-3 print:py-3 text-sm text-slate-900 border-l-0 sm:border-l print:border-l border-slate-200 bg-slate-50/30">
+        {children}
+      </div>
+    </div>
+  );
+}
+
 export function FieldTable({ children }: { children: ReactNode }) {
   return (
     <div className="border border-slate-300 rounded-sm overflow-hidden">

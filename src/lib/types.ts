@@ -27,6 +27,14 @@ export interface Candidate {
   chestNumber: string;
   batch: string;
   centre: string;
+  ssce: string;
+  trade: string;
+  qualification: string;
+  credentialsVerified?: {
+    ssce: boolean;
+    trade: boolean;
+    qualification: boolean;
+  };
   currentPhase: string;
   stages: CandidateStages;
   stageUpdates?: Partial<Record<keyof CandidateStages, StageUpdateDetail>>;

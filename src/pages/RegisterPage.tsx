@@ -53,10 +53,13 @@ export function RegisterPage() {
         chestNumber: formData.get("chestNumber") as string,
         batch: formData.get("batch") as string,
         centre: formData.get("centre") as string,
+        ssce: formData.get("ssce") as string,
+        trade: formData.get("trade") as string,
+        qualification: formData.get("qualification") as string,
         currentPhase: "Online Registration",
         photoUrl,
         stages: {
-          registration: "pass",
+          registration: "pending",
           aptitude: "pending",
           medical: "pending",
           run: "pending",
@@ -252,6 +255,38 @@ export function RegisterPage() {
                 placeholder="e.g. 36/2024/125"
                 onInput={(e) => (e.currentTarget.value = e.currentTarget.value.toUpperCase())}
               />
+            </div>
+            <div>
+              <label className="military-label">SSCE Result</label>
+              <select name="ssce" required className="military-input">
+                <option value="">Select Result Type...</option>
+                <option value="WAEC">WAEC</option>
+                <option value="NECO">NECO</option>
+                <option value="GCE">GCE</option>
+                <option value="NGCE">NGCE</option>
+              </select>
+            </div>
+            <div>
+              <label className="military-label">Trade</label>
+              <input
+                type="text"
+                name="trade"
+                required
+                className="military-input"
+                placeholder="e.g. Seaman, Mechanic"
+              />
+            </div>
+            <div>
+              <label className="military-label">Qualification</label>
+              <select name="qualification" required className="military-input">
+                <option value="">Select Qualification...</option>
+                <option value="OND">OND</option>
+                <option value="NCE">NCE</option>
+                <option value="HND">HND</option>
+                <option value="BSC">BSC</option>
+                <option value="MSC">MSC</option>
+                <option value="OTHER">OTHER</option>
+              </select>
             </div>
           </div>
         </Section>
